@@ -1,0 +1,113 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{graphicx}
+\usepackage{hyperref}
+
+\title{Report on CSE-438 Assignment 01 Notebooks}
+\author{Group Members: Asfar Hossain Sitab, Parmita Hossain Simia, Kamran Hasan, Nusrat Jahan Oishi}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+This report provides a brief summary of the four Jupyter notebooks submitted for CSE-438 Assignment 01. The notebooks cover intensity transformations and filtering, as well as training and evaluation of YOLO segmentation models (v8, v11, v12) on the Dresden Surgical Anatomy Dataset.
+
+\section{Part 1: Intensity Transformations and Filtering}
+The first notebook (\texttt{cse438-assignment01-group-j-intensity-tran.ipynb}) focuses on image processing techniques applied to sample images from the Dresden Dataset.
+
+\subsection{Data Loading}
+- Loads three sample images from the train set.
+- Converts images to RGB format for processing.
+
+\subsection{Intensity Transformations}
+Applies four transformations to enhance image features:
+- \textbf{Log Transformation}: Enhances darker regions for wide dynamic range images.
+- \textbf{Gamma Correction}: Adjusts brightness (gamma = 0.5 for brightening).
+- \textbf{Contrast Stretching}: Improves contrast by stretching intensity range.
+- \textbf{CLAHE}: Adaptive histogram equalization for local contrast enhancement.
+
+\subsection{Filtering Operations}
+Applies five filters for noise reduction and edge detection:
+- \textbf{Mean Filter}: Blurs image, reduces noise but may lose edges.
+- \textbf{Gaussian Blur}: Smooths image while preserving edges better than mean filter.
+- \textbf{Median Filter}: Effective for salt-and-pepper noise, preserves edges.
+- \textbf{Laplacian Filter}: Edge enhancement (grayscale output).
+- \textbf{Sobel Filter}: Edge detection using gradient computation (grayscale output).
+
+Results are visualized with original images and transformed/filtered versions.
+
+\section{Part 2: YOLOv8-Seg Training}
+The second notebook (\texttt{cse438-assignment01-group-no-j-yolov8seg.ipynb}) trains YOLOv8-Seg for instance segmentation on the Dresden Dataset.
+
+\subsection{Data Setup}
+- Installs Ultralytics library.
+- Configures dataset paths for train, val, and test splits.
+- Defines 11 classes: abdominal\_wall, colon, inferior\_mesenteric\_artery, etc.
+
+\subsection{Visualization}
+- Displays sample images with segmentation masks from train set.
+
+\subsection{Training}
+- Trains YOLOv8-Seg (yolov8s-seg.pt) for 3 epochs with image size 416, batch size 2.
+- Monitors box and segmentation losses.
+
+\subsection{Evaluation}
+- Validates on val set, computes mAP for boxes and masks.
+- Evaluates on test set if available.
+- Visualizes predictions vs. ground truth on test samples.
+
+\subsection{Performance}
+- Summarizes box mAP50-95 and mask mAP50-95 in a table.
+
+\section{Part 3: YOLOv11-Seg Training}
+The third notebook (\texttt{cse438-assignment01-group-no-j-yolov11-seg.ipynb}) is similar to Part 2 but uses YOLOv11-Seg.
+
+\subsection{Key Differences}
+- Loads YOLOv11 small segmentation model (yolo11s-seg.pt).
+- Training parameters similar: 3 epochs, 416 image size, batch 2.
+- Includes patience=10 for early stopping.
+
+\subsection{Evaluation and Visualization}
+- Same structure as YOLOv8: loss curves, validation, test evaluation, prediction visualization.
+- Performance summary table for YOLOv11-Seg metrics.
+
+\section{Part 4: YOLOv12-Seg Training}
+The fourth notebook (\texttt{cse438-assignment01-group-no-j-yolov12.ipynb}) trains YOLOv12-Seg.
+
+\subsection{Model Loading}
+- Loads YOLOv12-Seg model from YAML and pretrained weights (yolo12n-seg.yaml, yolo12n.pt).
+
+\subsection{Training and Evaluation}
+- Identical structure to previous YOLO notebooks: setup, visualization, training (3 epochs), loss curves, validation, test evaluation, predictions, performance summary.
+
+\section{Conclusion}
+The assignment demonstrates comprehensive image processing and deep learning techniques for surgical anatomy segmentation. Part 1 covers traditional image enhancement methods, while Parts 2-4 compare modern YOLO segmentation models (v8, v11, v12) on the Dresden Dataset. All notebooks follow consistent evaluation protocols and visualization approaches.
+
+\section{Findings, Problems, and Full Scenario Description}
+
+\subsection{Findings}
+- The intensity transformations (log, gamma, contrast stretching, CLAHE) effectively enhance image features for better visibility in surgical images.
+- Filtering operations (mean, Gaussian, median, Laplacian, Sobel) provide noise reduction and edge detection, with median filter being particularly effective for salt-and-pepper noise.
+- YOLO segmentation models (v8, v11, v12) are trained on the Dresden Dataset with 11 classes of anatomical structures, achieving instance segmentation capabilities.
+- Training is conducted for 3 epochs with consistent parameters (image size 416, batch size 2), allowing comparison across models.
+- Visualization of sample images with ground truth masks shows the dataset's complexity and the models' ability to handle polygon-based segmentation.
+
+\subsection{Problems}
+- The notebooks are configured for Kaggle environment with paths like '/kaggle/input/the-dresden-surgical-anatomy-dataset/Dresden Dataset', which may not work in local environments without path adjustments.
+- Training is limited to 3 epochs, which may not be sufficient for optimal performance; longer training could improve results but increases computational cost.
+- The code assumes GPU availability (device=0), but may fail on CPU-only systems.
+- Some visualizations (e.g., loss curves) depend on results.csv being saved, which may not always occur if training is interrupted.
+- The dataset paths in data.yaml are hardcoded and may require manual updates for different environments.
+
+\subsection{Full Scenario Description}
+The CSE-438 Assignment 01 involves processing and analyzing the Dresden Surgical Anatomy Dataset, which contains images of surgical anatomy with annotations for 11 classes including abdominal wall, colon, liver, pancreas, etc. The assignment is divided into two main parts:
+
+Part 1 focuses on traditional image processing techniques, applying intensity transformations and spatial filters to enhance image quality and extract features. This demonstrates foundational computer vision methods that can improve image interpretability for medical applications.
+
+Parts 2-4 involve deep learning approaches, specifically training state-of-the-art YOLO segmentation models (versions 8, 11, and 12) for instance segmentation on the dataset. Each notebook follows a similar structure: data setup, sample visualization, model training, loss monitoring, validation, test evaluation, prediction visualization, and performance summary. The models are trained with Ultralytics library, using consistent hyperparameters to enable fair comparison. The full scenario showcases the progression from classical image processing to modern AI-driven segmentation, highlighting their complementary roles in medical image analysis.
+
+\end{document}
